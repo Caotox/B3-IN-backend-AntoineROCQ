@@ -24,11 +24,11 @@ class Categorie extends \App\Entity\Categorie implements \Doctrine\ORM\Proxy\Int
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
         "\0".parent::class."\0".'description' => [parent::class, 'description', null, 16],
         "\0".parent::class."\0".'id' => [parent::class, 'id', null, 16],
-        "\0".parent::class."\0".'livre_id' => [parent::class, 'livre_id', null, 16],
+        "\0".parent::class."\0".'livres' => [parent::class, 'livres', null, 16],
         "\0".parent::class."\0".'nom' => [parent::class, 'nom', null, 16],
         'description' => [parent::class, 'description', null, 16],
         'id' => [parent::class, 'id', null, 16],
-        'livre_id' => [parent::class, 'livre_id', null, 16],
+        'livres' => [parent::class, 'livres', null, 16],
         'nom' => [parent::class, 'nom', null, 16],
     ];
 

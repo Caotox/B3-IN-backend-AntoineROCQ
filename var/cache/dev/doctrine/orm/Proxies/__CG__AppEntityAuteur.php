@@ -22,16 +22,16 @@ class Auteur extends \App\Entity\Auteur implements \Doctrine\ORM\Proxy\InternalP
     
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
-        "\0".parent::class."\0".'auteur_id' => [parent::class, 'auteur_id', null, 16],
         "\0".parent::class."\0".'biographie' => [parent::class, 'biographie', null, 16],
         "\0".parent::class."\0".'dateNaissance' => [parent::class, 'dateNaissance', null, 16],
         "\0".parent::class."\0".'id' => [parent::class, 'id', null, 16],
+        "\0".parent::class."\0".'livres' => [parent::class, 'livres', null, 16],
         "\0".parent::class."\0".'nom' => [parent::class, 'nom', null, 16],
         "\0".parent::class."\0".'prenom' => [parent::class, 'prenom', null, 16],
-        'auteur_id' => [parent::class, 'auteur_id', null, 16],
         'biographie' => [parent::class, 'biographie', null, 16],
         'dateNaissance' => [parent::class, 'dateNaissance', null, 16],
         'id' => [parent::class, 'id', null, 16],
+        'livres' => [parent::class, 'livres', null, 16],
         'nom' => [parent::class, 'nom', null, 16],
         'prenom' => [parent::class, 'prenom', null, 16],
     ];
