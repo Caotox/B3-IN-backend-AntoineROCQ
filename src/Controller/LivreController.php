@@ -96,7 +96,7 @@ class LivreController extends AbstractController
 
             $livre = new Livre();
             $livre->setTitre($data['titre']);
-            $livre->setIdAuteur($auteur);
+            $livre->setAuteur($auteur);
             $livre->setCategorie($categorie);
             $livre->setDisponible($data['disponible'] ?? true);
 
@@ -157,7 +157,7 @@ class LivreController extends AbstractController
                 if (!$auteur) {
                     return new JsonResponse(['error' => 'Auteur non trouvé'], Response::HTTP_NOT_FOUND);
                 }
-                $livre->setIdAuteur($auteur);
+                $livre->setAuteur($auteur);
             }
 
             if (isset($data['categorie_id'])) {
@@ -209,9 +209,9 @@ class LivreController extends AbstractController
             'datePublication' => $livre->getDatePublication()?->format('Y-m-d'),
             'disponible' => $livre->isDisponible(),
             'auteur' => [
-                'id' => $livre->getIdAuteur()->getId(),
-                'nom' => $livre->getIdAuteur()->getNom(),
-                'prenom' => $livre->getIdAuteur()->getPrenom(),
+                'id' => $livre->getAuteur()->getId(),
+                'nom' => $livre->getAuteur()->getNom(),
+                'prenom' => $livre->getAuteur()->getPrenom(),
             ],
             'categorie' => [
                 'id' => $livre->getCategorie()->getId(),
