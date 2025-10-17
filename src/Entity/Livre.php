@@ -30,6 +30,12 @@ class Livre
     #[ORM\JoinColumn(nullable: false)]
     private ?Categorie $categorie = null;
 
+    #[ORM\OneToOne(mappedBy: 'id_livre', cascade: ['persist', 'remove'])]
+    private ?Emprunt $emprunt = null;
+
+    #[ORM\OneToOne(mappedBy: 'disponible', cascade: ['persist', 'remove'])]
+    private ?Emprunt $emprunt_id = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -98,6 +104,50 @@ class Livre
     public function setCategorie(?Categorie $categorie): static
     {
         $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    public function getEmprunt(): ?Emprunt
+    {
+        return $this->emprunt;
+    }
+
+    public function setEmprunt(?Emprunt $emprunt): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($emprunt === null && $this->emprunt !== null) {
+            $this->emprunt->setIdLivre(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($emprunt !== null && $emprunt->getIdLivre() !== $this) {
+            $emprunt->setIdLivre($this);
+        }
+
+        $this->emprunt = $emprunt;
+
+        return $this;
+    }
+
+    public function getEmpruntId(): ?Emprunt
+    {
+        return $this->emprunt_id;
+    }
+
+    public function setEmpruntId(?Emprunt $emprunt_id): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($emprunt_id === null && $this->emprunt_id !== null) {
+            $this->emprunt_id->setDisponible(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($emprunt_id !== null && $emprunt_id->getDisponible() !== $this) {
+            $emprunt_id->setDisponible($this);
+        }
+
+        $this->emprunt_id = $emprunt_id;
 
         return $this;
     }

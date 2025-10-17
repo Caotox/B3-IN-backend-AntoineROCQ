@@ -187,14 +187,50 @@
     <service id="App\Entity" class="App\Entity" abstract="true">
       <tag name="container.excluded" source="in &quot;config/services.yaml&quot;"/>
     </service>
-    <service id="App\Controller\LibraryController" class="App\Controller\LibraryController" autowire="true" autoconfigure="true">
-      <tag name="container.error" message="The autoloader expected class &quot;App\Controller\LibraryController&quot; to be defined in file &quot;/Applications/MAMP/htdocs/2-B3-IN-backend-AntoineROCQ/vendor/composer/../../src/Controller/LibraryController.php&quot;. The file was found but the class was not in it, the class name or namespace probably has a typo."/>
+    <service id="App\Controller\EmpruntController" class="App\Controller\EmpruntController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <argument type="service" id="doctrine.orm.default_entity_manager"/>
+      <argument type="service" id="App\Repository\EmpruntRepository"/>
+      <argument type="service" id="App\Repository\LivreRepository"/>
+      <argument type="service" id="App\Repository\UtilisateurRepository"/>
+      <argument type="service" id="monolog.logger"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.O2p6Lk7.App\Controller\EmpruntController"/>
+      </call>
+    </service>
+    <service id="App\Controller\LivreController" class="App\Controller\LivreController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <argument type="service" id="doctrine.orm.default_entity_manager"/>
+      <argument type="service" id="App\Repository\LivreRepository"/>
+      <argument type="service" id="App\Repository\AuteurRepository"/>
+      <argument type="service" id="App\Repository\CategorieRepository"/>
+      <argument type="service" id="monolog.logger"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.O2p6Lk7.App\Controller\LivreController"/>
+      </call>
+    </service>
+    <service id="App\Controller\UtilisateurController" class="App\Controller\UtilisateurController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <argument type="service" id="App\Repository\EmpruntRepository"/>
+      <argument type="service" id="App\Repository\LivreRepository"/>
+      <argument type="service" id="App\Repository\UtilisateurRepository"/>
+      <argument type="service" id="monolog.logger"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.O2p6Lk7.App\Controller\UtilisateurController"/>
+      </call>
     </service>
     <service id="App\Repository\AuteurRepository" class="App\Repository\AuteurRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
     <service id="App\Repository\CategorieRepository" class="App\Repository\CategorieRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\EmpruntRepository" class="App\Repository\EmpruntRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
@@ -1733,7 +1769,7 @@
     <service id="doctrine.orm.configuration" class="Doctrine\ORM\Configuration" abstract="true"/>
     <service id="doctrine.orm.entity_manager.abstract" class="Doctrine\ORM\EntityManager" lazy="true" abstract="true"/>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory">
-      <argument type="service" id=".service_locator.lroVoa9"/>
+      <argument type="service" id=".service_locator.3cZ_vIf"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -2465,10 +2501,21 @@
       <argument type="collection"/>
       <argument type="collection"/>
     </service>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\EmpruntController" class="App\Controller\EmpruntController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\EmpruntController" class="App\Controller\EmpruntController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\EmpruntController" class="App\Controller\EmpruntController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\LivreController" class="App\Controller\LivreController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\LivreController" class="App\Controller\LivreController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\LivreController" class="App\Controller\LivreController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\UtilisateurController" class="App\Controller\UtilisateurController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\UtilisateurController" class="App\Controller\UtilisateurController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\UtilisateurController" class="App\Controller\UtilisateurController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\AuteurRepository" class="App\Repository\AuteurRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\AuteurRepository" class="App\Repository\AuteurRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\CategorieRepository" class="App\Repository\CategorieRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\CategorieRepository" class="App\Repository\CategorieRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\EmpruntRepository" class="App\Repository\EmpruntRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\EmpruntRepository" class="App\Repository\EmpruntRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\LivreRepository" class="App\Repository\LivreRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\LivreRepository" class="App\Repository\LivreRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UtilisateurRepository" class="App\Repository\UtilisateurRepository" autowire="true" abstract="true"/>
@@ -2971,11 +3018,12 @@
         <argument key="doctrine.orm.listeners.pdo_session_handler_schema_listener" type="service_closure" id="doctrine.orm.listeners.pdo_session_handler_schema_listener"/>
       </argument>
     </service>
-    <service id=".service_locator.lroVoa9" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.3cZ_vIf" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Repository\AuteurRepository" type="service_closure" id="App\Repository\AuteurRepository"/>
         <argument key="App\Repository\CategorieRepository" type="service_closure" id="App\Repository\CategorieRepository"/>
+        <argument key="App\Repository\EmpruntRepository" type="service_closure" id="App\Repository\EmpruntRepository"/>
         <argument key="App\Repository\LivreRepository" type="service_closure" id="App\Repository\LivreRepository"/>
         <argument key="App\Repository\UtilisateurRepository" type="service_closure" id="App\Repository\UtilisateurRepository"/>
       </argument>
@@ -3072,6 +3120,33 @@
       </call>
     </service>
     <service id="monolog.handler.null_internal" class="Monolog\Handler\NullHandler"/>
+    <service id=".service_locator.O2p6Lk7" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="http_kernel" type="service_closure" id="http_kernel" on-invalid="ignore"/>
+        <argument key="parameter_bag" type="service_closure" id="parameter_bag" on-invalid="ignore"/>
+        <argument key="request_stack" type="service_closure" id="request_stack" on-invalid="ignore"/>
+        <argument key="router" type="service_closure" id="router.default" on-invalid="ignore"/>
+      </argument>
+    </service>
+    <service id=".service_locator.O2p6Lk7.App\Controller\EmpruntController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\EmpruntController"/>
+      <argument>App\Controller\EmpruntController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.O2p6Lk7" method="withContext"/>
+    </service>
+    <service id=".service_locator.O2p6Lk7.App\Controller\LivreController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\LivreController"/>
+      <argument>App\Controller\LivreController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.O2p6Lk7" method="withContext"/>
+    </service>
+    <service id=".service_locator.O2p6Lk7.App\Controller\UtilisateurController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\UtilisateurController"/>
+      <argument>App\Controller\UtilisateurController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.O2p6Lk7" method="withContext"/>
+    </service>
     <service id=".service_locator.LFIBYeS" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -3162,6 +3237,9 @@
       <call method="allowControllers">
         <argument type="collection">
           <argument>App\Kernel</argument>
+          <argument>App\Controller\EmpruntController</argument>
+          <argument>App\Controller\LivreController</argument>
+          <argument>App\Controller\UtilisateurController</argument>
           <argument>Doctrine\Bundle\DoctrineBundle\Controller\ProfilerController</argument>
         </argument>
       </call>
@@ -3915,12 +3993,14 @@
     <service id=".service_locator.bJ.4HC5" alias=".service_locator.w7.f4fT"/>
     <service id=".service_locator.L.EDYUC" alias=".service_locator.HBdvAhp"/>
     <service id=".service_locator.LMuqDDe" alias=".service_locator.VHsrTPK"/>
+    <service id=".service_locator.jUv.zyj" alias=".service_locator.O2p6Lk7"/>
     <service id="event_dispatcher" alias="debug.event_dispatcher" public="true"/>
     <service id="controller_resolver" alias="debug.controller_resolver"/>
     <service id="argument_resolver" alias="debug.argument_resolver"/>
     <service id="doctrine.migrations.migrations_factory" alias="doctrine.migrations.container_aware_migrations_factory"/>
     <service id="doctrine.orm.default_metadata_driver" alias=".doctrine.orm.default_metadata_driver"/>
     <service id=".service_locator.gFlme_s" alias=".service_locator.y4_Zrx."/>
+    <service id=".service_locator.KL3pAWR" alias=".service_locator.O2p6Lk7"/>
     <service id=".service_locator.3bxtozr" alias=".service_locator._ju.bgC"/>
     <service id=".service_locator._kIAbz1" alias=".service_locator.TpoC7U9"/>
   </services>
