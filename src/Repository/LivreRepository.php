@@ -16,17 +16,19 @@ class LivreRepository extends ServiceEntityRepository
         parent::__construct($registry, Livre::class);
     }
     public function findBooksOfAuthorBorrowedBetweenDates(int $auteurId, \DateTimeInterface $startDate, \DateTimeInterface $endDate): array
-    {
-        return $this->createQueryBuilder('l')
-            ->innerJoin('l.emprunts', 'e')
-            ->where('l.auteur = :auteurId')
-            ->andWhere('e.dateEmprunt BETWEEN :startDate AND :endDate')
-            ->setParameter('auteurId', $auteurId)
-            ->setParameter('startDate', $startDate)
-            ->setParameter('endDate', $endDate)
-            ->getQuery()
-            ->getResult();
-    }
+{
+    return $this->createQueryBuilder('l')
+        ->innerJoin('l.emprunts', 'e')
+        ->innerJoin('l.id_auteur', 'a')
+        ->where('a.id = :auteurId')
+        ->andWhere('e.dateEmprunt BETWEEN :startDate AND :endDate')
+        ->setParameter('auteurId', $auteurId)
+        ->setParameter('startDate', $startDate)
+        ->setParameter('endDate', $endDate)
+        ->getQuery()
+        ->getResult();
+}
+
 
     //    /**
     //     * @return Livre[] Returns an array of Livre objects

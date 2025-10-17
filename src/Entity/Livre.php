@@ -30,10 +30,10 @@ class Livre
     #[ORM\JoinColumn(nullable: false)]
     private ?Categorie $categorie = null;
 
-    #[ORM\OneToOne(mappedBy: 'id_livre', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'id_livre', cascade: ['persist', 'remove'])]
     private ?Emprunt $emprunt = null;
 
-    #[ORM\OneToOne(mappedBy: 'disponible', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'disponible', cascade: ['persist', 'remove'])]
     private ?Emprunt $emprunt_id = null;
 
     public function getId(): ?int

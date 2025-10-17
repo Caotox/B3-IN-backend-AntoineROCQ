@@ -13,10 +13,10 @@ class Emprunt
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'emprunt', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'emprunt', cascade: ['persist', 'remove'])]
     private ?Livre $id_livre = null;
 
-    #[ORM\OneToOne(inversedBy: 'emprunt_id', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'emprunt_id', cascade: ['persist', 'remove'])]
     private ?Livre $disponible = null;
 
     #[ORM\ManyToOne(inversedBy: 'emprunts')]
