@@ -69,11 +69,6 @@ Base URL: `http://127.0.0.1:8000`
   "livre_id": 1
 }
 ```
-
-**Règles:**
-- Le livre doit être disponible
-- L'utilisateur ne peut pas avoir plus de 4 emprunts actifs
-
 ---
 
 ### 2.2. Retourner un livre
@@ -85,10 +80,6 @@ Base URL: `http://127.0.0.1:8000`
 
 ### 3.1. Voir les emprunts en cours d'un utilisateur
 **GET** `/api/utilisateurs/1/emprunts`
-
-**Réponse:**
-- Nombre d'emprunts en cours
-- Liste triée par date (du plus ancien au plus récent)
 
 ---
 
