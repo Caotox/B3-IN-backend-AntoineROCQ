@@ -22,6 +22,14 @@ class Livre
     #[ORM\Column]
     private ?bool $disponible = null;
 
+    #[ORM\ManyToOne(inversedBy: 'auteur_id')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Auteur $id_auteur = null;
+
+    #[ORM\ManyToOne(inversedBy: 'livre_id')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Categorie $categorie = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -66,6 +74,30 @@ class Livre
     public function setDisponible(bool $disponible): static
     {
         $this->disponible = $disponible;
+
+        return $this;
+    }
+
+    public function getIdAuteur(): ?Auteur
+    {
+        return $this->id_auteur;
+    }
+
+    public function setIdAuteur(?Auteur $id_auteur): static
+    {
+        $this->id_auteur = $id_auteur;
+
+        return $this;
+    }
+
+    public function getCategorie(): ?Categorie
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?Categorie $categorie): static
+    {
+        $this->categorie = $categorie;
 
         return $this;
     }
