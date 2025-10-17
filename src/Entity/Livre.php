@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\LivreRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LivreRepository::class)]
@@ -16,36 +19,31 @@ class Livre
     #[ORM\Column(length: 255)]
     private ?string $titre = null;
 
-    #[ORM\Column]
-    private ?\DateTime $datePublication = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $datePublication = null;
 
     #[ORM\Column]
-    private ?bool $disponible = null;
+    private ?bool $disponible = true;
 
-    #[ORM\ManyToOne(inversedBy: 'auteur_id')]
+    #[ORM\ManyToOne(inversedBy: 'livres')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Auteur $id_auteur = null;
+    private ?Auteur $auteur = null;
 
-    #[ORM\ManyToOne(inversedBy: 'livre_id')]
+    #[ORM\ManyToOne(inversedBy: 'livres')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Categorie $categorie = null;
 
-    #[ORM\OneToMany(mappedBy: 'id_livre', cascade: ['persist', 'remove'])]
-    private ?Emprunt $emprunt = null;
+    #[ORM\OneToMany(targetEntity: Emprunt::class, mappedBy: 'livre', orphanRemoval: true)]
+    private Collection $emprunts;
 
-    #[ORM\OneToMany(mappedBy: 'disponible', cascade: ['persist', 'remove'])]
-    private ?Emprunt $emprunt_id = null;
+    public function __construct()
+    {
+        $this->emprunts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getTitre(): ?string
@@ -60,12 +58,12 @@ class Livre
         return $this;
     }
 
-    public function getDatePublication(): ?\DateTime
+    public function getDatePublication(): ?\DateTimeInterface
     {
         return $this->datePublication;
     }
 
-    public function setDatePublication(\DateTime $datePublication): static
+    public function setDatePublication(?\DateTimeInterface $datePublication): static
     {
         $this->datePublication = $datePublication;
 
@@ -84,14 +82,14 @@ class Livre
         return $this;
     }
 
-    public function getIdAuteur(): ?Auteur
+    public function getAuteur(): ?Auteur
     {
-        return $this->id_auteur;
+        return $this->auteur;
     }
 
-    public function setIdAuteur(?Auteur $id_auteur): static
+    public function setAuteur(?Auteur $auteur): static
     {
-        $this->id_auteur = $id_auteur;
+        $this->auteur = $auteur;
 
         return $this;
     }
@@ -108,46 +106,31 @@ class Livre
         return $this;
     }
 
-    public function getEmprunt(): ?Emprunt
+    /**
+     * @return Collection<int, Emprunt>
+     */
+    public function getEmprunts(): Collection
     {
-        return $this->emprunt;
+        return $this->emprunts;
     }
 
-    public function setEmprunt(?Emprunt $emprunt): static
+    public function addEmprunt(Emprunt $emprunt): static
     {
-        // unset the owning side of the relation if necessary
-        if ($emprunt === null && $this->emprunt !== null) {
-            $this->emprunt->setIdLivre(null);
+        if (!$this->emprunts->contains($emprunt)) {
+            $this->emprunts->add($emprunt);
+            $emprunt->setLivre($this);
         }
-
-        // set the owning side of the relation if necessary
-        if ($emprunt !== null && $emprunt->getIdLivre() !== $this) {
-            $emprunt->setIdLivre($this);
-        }
-
-        $this->emprunt = $emprunt;
 
         return $this;
     }
 
-    public function getEmpruntId(): ?Emprunt
+    public function removeEmprunt(Emprunt $emprunt): static
     {
-        return $this->emprunt_id;
-    }
-
-    public function setEmpruntId(?Emprunt $emprunt_id): static
-    {
-        // unset the owning side of the relation if necessary
-        if ($emprunt_id === null && $this->emprunt_id !== null) {
-            $this->emprunt_id->setDisponible(null);
+        if ($this->emprunts->removeElement($emprunt)) {
+            if ($emprunt->getLivre() === $this) {
+                $emprunt->setLivre(null);
+            }
         }
-
-        // set the owning side of the relation if necessary
-        if ($emprunt_id !== null && $emprunt_id->getDisponible() !== $this) {
-            $emprunt_id->setDisponible($this);
-        }
-
-        $this->emprunt_id = $emprunt_id;
 
         return $this;
     }

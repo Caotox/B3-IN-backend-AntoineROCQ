@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\EmpruntRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EmpruntRepository::class)]
@@ -13,49 +14,23 @@ class Emprunt
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'emprunt', cascade: ['persist', 'remove'])]
-    private ?Livre $id_livre = null;
-
-    #[ORM\ManyToOne(inversedBy: 'emprunt_id', cascade: ['persist', 'remove'])]
-    private ?Livre $disponible = null;
+    #[ORM\ManyToOne(inversedBy: 'emprunts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Utilisateur $utilisateur = null;
 
     #[ORM\ManyToOne(inversedBy: 'emprunts')]
-    private ?Utilisateur $utilisateur = null;
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Livre $livre = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $dateEmprunt = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateRetour = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    public function getIdLivre(): ?Livre
-    {
-        return $this->id_livre;
-    }
-
-    public function setIdLivre(?Livre $id_livre): static
-    {
-        $this->id_livre = $id_livre;
-
-        return $this;
-    }
-
-    public function getDisponible(): ?Livre
-    {
-        return $this->disponible;
-    }
-
-    public function setDisponible(?Livre $disponible): static
-    {
-        $this->disponible = $disponible;
-
-        return $this;
     }
 
     public function getUtilisateur(): ?Utilisateur
@@ -66,6 +41,42 @@ class Emprunt
     public function setUtilisateur(?Utilisateur $utilisateur): static
     {
         $this->utilisateur = $utilisateur;
+
+        return $this;
+    }
+
+    public function getLivre(): ?Livre
+    {
+        return $this->livre;
+    }
+
+    public function setLivre(?Livre $livre): static
+    {
+        $this->livre = $livre;
+
+        return $this;
+    }
+
+    public function getDateEmprunt(): ?\DateTimeInterface
+    {
+        return $this->dateEmprunt;
+    }
+
+    public function setDateEmprunt(\DateTimeInterface $dateEmprunt): static
+    {
+        $this->dateEmprunt = $dateEmprunt;
+
+        return $this;
+    }
+
+    public function getDateRetour(): ?\DateTimeInterface
+    {
+        return $this->dateRetour;
+    }
+
+    public function setDateRetour(?\DateTimeInterface $dateRetour): static
+    {
+        $this->dateRetour = $dateRetour;
 
         return $this;
     }

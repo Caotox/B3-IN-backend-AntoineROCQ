@@ -21,10 +21,7 @@ class Utilisateur
     #[ORM\Column(length: 255)]
     private ?string $prenom = null;
 
-    /**
-     * @var Collection<int, Emprunt>
-     */
-    #[ORM\OneToMany(targetEntity: Emprunt::class, mappedBy: 'utilisateur')]
+    #[ORM\OneToMany(targetEntity: Emprunt::class, mappedBy: 'utilisateur', orphanRemoval: true)]
     private Collection $emprunts;
 
     public function __construct()
@@ -35,13 +32,6 @@ class Utilisateur
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getNom(): ?string
@@ -89,7 +79,6 @@ class Utilisateur
     public function removeEmprunt(Emprunt $emprunt): static
     {
         if ($this->emprunts->removeElement($emprunt)) {
-            // set the owning side to null (unless already changed)
             if ($emprunt->getUtilisateur() === $this) {
                 $emprunt->setUtilisateur(null);
             }

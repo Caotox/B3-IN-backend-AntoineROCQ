@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CategorieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CategorieRepository::class)]
@@ -18,30 +19,20 @@ class Categorie
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    /**
-     * @var Collection<int, Livre>
-     */
     #[ORM\OneToMany(targetEntity: Livre::class, mappedBy: 'categorie')]
-    private Collection $livre_id;
+    private Collection $livres;
 
     public function __construct()
     {
-        $this->livre_id = new ArrayCollection();
+        $this->livres = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getNom(): ?string
@@ -61,7 +52,7 @@ class Categorie
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 
@@ -71,27 +62,26 @@ class Categorie
     /**
      * @return Collection<int, Livre>
      */
-    public function getLivreId(): Collection
+    public function getLivres(): Collection
     {
-        return $this->livre_id;
+        return $this->livres;
     }
 
-    public function addLivreId(Livre $livreId): static
+    public function addLivre(Livre $livre): static
     {
-        if (!$this->livre_id->contains($livreId)) {
-            $this->livre_id->add($livreId);
-            $livreId->setCategorie($this);
+        if (!$this->livres->contains($livre)) {
+            $this->livres->add($livre);
+            $livre->setCategorie($this);
         }
 
         return $this;
     }
 
-    public function removeLivreId(Livre $livreId): static
+    public function removeLivre(Livre $livre): static
     {
-        if ($this->livre_id->removeElement($livreId)) {
-            // set the owning side to null (unless already changed)
-            if ($livreId->getCategorie() === $this) {
-                $livreId->setCategorie(null);
+        if ($this->livres->removeElement($livre)) {
+            if ($livre->getCategorie() === $this) {
+                $livre->setCategorie(null);
             }
         }
 

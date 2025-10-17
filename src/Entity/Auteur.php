@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\AuteurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AuteurRepository::class)]
@@ -21,33 +22,23 @@ class Auteur
     #[ORM\Column(length: 255)]
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $biographie = null;
 
-    #[ORM\Column]
-    private ?\DateTime $dateNaissance = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateNaissance = null;
 
-    /**
-     * @var Collection<int, Livre>
-     */
-    #[ORM\OneToMany(targetEntity: Livre::class, mappedBy: 'id_auteur')]
-    private Collection $auteur_id;
+    #[ORM\OneToMany(targetEntity: Livre::class, mappedBy: 'auteur')]
+    private Collection $livres;
 
     public function __construct()
     {
-        $this->auteur_id = new ArrayCollection();
+        $this->livres = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getNom(): ?string
@@ -79,19 +70,19 @@ class Auteur
         return $this->biographie;
     }
 
-    public function setBiographie(string $biographie): static
+    public function setBiographie(?string $biographie): static
     {
         $this->biographie = $biographie;
 
         return $this;
     }
 
-    public function getDateNaissance(): ?\DateTime
+    public function getDateNaissance(): ?\DateTimeInterface
     {
         return $this->dateNaissance;
     }
 
-    public function setDateNaissance(\DateTime $dateNaissance): static
+    public function setDateNaissance(?\DateTimeInterface $dateNaissance): static
     {
         $this->dateNaissance = $dateNaissance;
 
@@ -101,30 +92,26 @@ class Auteur
     /**
      * @return Collection<int, Livre>
      */
-
-    // Ici je me suis un peu trompé dans le nom de mon champs, mais pour éviter de tout casser je le laisse comme ça
-    // Il s'agit donc ici de la relation entre Auteur et Livre, plus précisemment du champs correspondant à livre dans l'Entité Auteur
-    public function getAuteurId(): Collection
+    public function getLivres(): Collection
     {
-        return $this->auteur_id;
+        return $this->livres;
     }
 
-    public function addAuteurId(Livre $auteurId): static
+    public function addLivre(Livre $livre): static
     {
-        if (!$this->auteur_id->contains($auteurId)) {
-            $this->auteur_id->add($auteurId);
-            $auteurId->setIdAuteur($this);
+        if (!$this->livres->contains($livre)) {
+            $this->livres->add($livre);
+            $livre->setAuteur($this);
         }
 
         return $this;
     }
 
-    public function removeAuteurId(Livre $auteurId): static
+    public function removeLivre(Livre $livre): static
     {
-        if ($this->auteur_id->removeElement($auteurId)) {
-            // set the owning side to null (unless already changed)
-            if ($auteurId->getIdAuteur() === $this) {
-                $auteurId->setIdAuteur(null);
+        if ($this->livres->removeElement($livre)) {
+            if ($livre->getAuteur() === $this) {
+                $livre->setAuteur(null);
             }
         }
 
